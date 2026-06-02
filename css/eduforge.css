@@ -1,0 +1,11 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.book-card {
+  transition: 0.2s;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
