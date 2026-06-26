@@ -1,0 +1,24 @@
+{
+  "name": "eduforge",
+  "version": "1.0.0",
+  "description": "\"# EduForge\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khaleel08/EduForge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/khaleel08/EduForge/issues"
+  },
+  "homepage": "https://github.com/khaleel08/EduForge#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Browse Books</title>
+  <title>Browse</title>
   <link rel="icon" type="image/x-icon" href="assets/icon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/tailwind-output.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="css/eduforge.css" />
 </head>
@@ -58,7 +58,10 @@
           <!-- Navigation links -->
           <a href="index.html"   class="block px-4 py-3 hover:bg-gray-100">Home</a>
           <a href="browse.html"  class="block px-4 py-3 hover:bg-gray-100">Browse</a>
+          <a href="publisher-dashboard.html" id="publisherDashboardLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+          <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
           <a href="cart.html"    class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+          <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
 
           <!-- Mobile logout button -->
           <button
@@ -89,12 +92,18 @@
     class="hidden md:hidden bg-white border-b px-4 py-3"
   >
     <input
-      type="text"
-      id="mobileSearchInput"
-      placeholder="Search books..."
-      class="w-full border rounded-lg px-4 py-1.5"
-    />
-  </div>
+          type="text"
+          id="mobileSearchInput"
+          placeholder="Search books, authors, publishers..."
+          class="w-full px-4 py-2 border rounded-full"
+        />
+        <div
+          id="mobileSearchDropdown"
+          class="hidden absolute top-full mt-2 bg-white shadow-lg rounded-lg w-full z-50"
+        >
+          <div id="mobileSearchResults"></div>
+        </div>
+      </div>
 
   <!-- Slide-out sidebar menu —-->
   <div id="mobileMenu" class="hidden fixed inset-0 z-50">
@@ -110,8 +119,10 @@
       <div class="py-2">
         <a href="index.html"  class="block px-4 py-3 hover:bg-gray-100">Home</a>
         <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100">Browse</a>
-        <a href="#"           class="block px-4 py-3 hover:bg-gray-100">Categories</a>
+        <a href="publisher-dashboard.html" id="sidebarPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+        <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
         <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+        <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
       </div>
     </div>
 
@@ -128,25 +139,7 @@
       <div class="flex items-center gap-8">
         <img src="assets/logo.jpeg" class="w-20 md:w-38 h-auto" alt="Eduforge logo" />
 
-        <!-- Categories dropdown -->
-        <div class="relative">
-          <button
-            id="categoriesBtn"
-            class="font-medium text-gray-700 hover:text-blue-600"
-          >
-            Categories
-          </button>
-
-          <div
-            id="categoriesDropdown"
-            class="hidden absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
-          >
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Computer Science</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Cybersecurity</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Mathematics</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Business</a>
-          </div>
-        </div>
+        
       </div>
 
       <!-- Center: Search input with dropdown -->
@@ -225,8 +218,17 @@
               <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
                 <img src="assets/browse.png" alt="" class="w-5 h-5 inline mr-2" /> Browse
               </a>
+              <a href="publisher-dashboard.html" id="desktopPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/publisher.png" alt="" class="w-5 h-5 inline mr-2" /> Publisher Dashboard
+              </a>
+              <a href="library.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/library.png" alt="" class="w-5 h-5 inline mr-2" /> My Library
+              </a>
               <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
                 <img src="assets/cart.png" alt="" class="w-5 h-5 inline mr-2" /> Cart
+              </a>
+              <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/purchase-history.png" alt="" class="w-5 h-5 inline mr-2" /> Purchase History
               </a>
             </div>
 
@@ -250,6 +252,10 @@
 
 </nav><!-- end navbar -->
 
+
+
+
+
 <!-- Browse Books -->
 <section class="max-w-7xl mx-auto px-4 py-8">
 
@@ -268,12 +274,24 @@
       All Categories
     </option>
 
-    <option value="Cybersecurity">
-      Cybersecurity
-    </option>
-
     <option value="Computer Science">
       Computer Science
+    </option>
+
+    <option value="Text Books">
+      Text Books
+    </option>
+
+    <option value="Literature">
+      Literature
+    </option>
+
+    <option value="History">
+      History
+    </option>
+
+    <option value="Science">
+      Science
     </option>
 
     <option value="Mathematics">
@@ -281,17 +299,95 @@
     </option>
 
     <option value="Business">
-      Business
+      Business 
     </option>
+
+    <option value="Children's Books">
+      Children's Books
+    </option>
+
+    <option value="Self-Help">
+      Self-Help 
+    </option>
+
+    <option value="Fiction">
+      Fiction
+    </option>
+
 
   </select>
 
 </div>
   <div
-    id="booksContainer"
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-  ></div>
+  id="booksContainer"
+  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+></div>
 
+</section>
+
+
+
+
+<!-- FEATURED BOOKS -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-3xl font-bold">Featured Books</h2>
+        <p class="text-gray-600">Handpicked books for students</p>
+      </div>
+    </div>
+    <!-- Books injected here by books.js -->
+    <div id="featuredBooksContainer" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- Newly Released Books -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+
+    <h2 class="text-3xl font-bold mb-2">
+      Newly Released Books
+    </h2>
+
+    <p class="text-gray-600 mb-8">
+      Latest books added to EduForge
+    </p>
+
+    <div
+      id="newReleaseBooksContainer"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6"
+    ></div>
+
+  </div>
+</section>
+
+
+
+<!-- WHY BROWSE EDUFORGE -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-8 text-center text-gray-900">Why Browse Eduforge?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-gray-50 rounded-lg shadow p-6 text-center">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">Curated Selection</h3>
+        <p class="text-gray-700">Every book is reviewed before publishing, ensuring quality content across all categories.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg shadow p-6 text-center">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">Updated Regularly</h3>
+        <p class="text-gray-700">New titles are added every week, so there's always something fresh to discover.</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg shadow p-6 text-center">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">For Every Learner</h3>
+        <p class="text-gray-700">From textbooks to fiction, find content suited to your subject and learning level.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 

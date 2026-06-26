@@ -3,9 +3,11 @@
 // ================================================================
 
 import { signUp, signIn, logout } from './auth.js'
-import { loadFeaturedBooks }      from './books.js'
+import { loadFeaturedBooks,
+  renderCard }      from './books.js'
 import { searchBooks }            from './search.js'
 import { supabase }               from './supabase.js'
+
 
 lucide.createIcons()
 
@@ -42,6 +44,10 @@ const searchInput    = document.getElementById('searchInput')
 const searchDropdown = document.getElementById('searchDropdown')
 const searchResults  = document.getElementById('searchResults')
 
+// --- Search elements (mobile) ---
+const mobileSearchInput    = document.getElementById('mobileSearchInput')
+const mobileSearchDropdown = document.getElementById('mobileSearchDropdown')
+const mobileSearchResults  = document.getElementById('mobileSearchResults')
 
 // AUTH MODAL — open / close
 
@@ -121,6 +127,37 @@ async function checkUser() {
       .select('*')
       .eq('id', user.id)
       .single()
+    
+
+    if (profile?.role === 'publisher') {
+
+  document
+    .getElementById('mobilePublisherLink')
+    ?.classList.remove('hidden')
+
+  document
+    .getElementById('sidebarPublisherLink')
+    ?.classList.remove('hidden')
+
+  document
+    .getElementById('desktopPublisherLink')
+    ?.classList.remove('hidden')
+}
+
+const publisherLink =
+document.getElementById(
+  'publisherDashboardLink'
+)
+
+if (
+  profile.role === 'publisher'
+) {
+  publisherLink.classList.remove(
+    'hidden'
+  )
+  
+}
+
 
     const fullName    = profile?.full_name || 'User'
     const email       = user.email
@@ -300,3 +337,172 @@ document.addEventListener('click', (e) => {
   }
 
 })
+
+
+searchInput?.addEventListener(
+  'input',
+  async (e) => {
+
+    const query =
+    e.target.value.trim()
+
+    if (!query) {
+
+      searchDropdown.classList.add(
+        'hidden'
+      )
+
+      return
+    }
+
+    const books =
+    await searchBooks(query)
+
+    if (books.length === 0) {
+
+      searchResults.innerHTML = `
+        <div class="p-4 text-gray-500">
+          No books found
+        </div>
+      `
+
+      searchDropdown.classList.remove(
+        'hidden'
+      )
+
+      return
+    }
+
+    searchResults.innerHTML =
+    books.map(book => `
+
+      <a
+        href="book.html?id=${book.id}"
+        class="block p-3 border-b hover:bg-gray-100"
+      >
+
+        <div class="font-semibold">
+          ${book.title}
+        </div>
+
+        <div class="text-sm text-gray-500">
+          ${book.author}
+        </div>
+
+      </a>
+
+    `).join('')
+
+    searchDropdown.classList.remove(
+      'hidden'
+    )
+
+  }
+)
+
+
+// MOBILE SEARCH — live search dropdown
+
+mobileSearchInput?.addEventListener('input', async (e) => {
+  const query = e.target.value.trim()
+
+  if (!query) {
+    mobileSearchDropdown.classList.add('hidden')
+    return
+  }
+
+  const books = await searchBooks(query)
+
+  if (books.length === 0) {
+    mobileSearchResults.innerHTML = `
+      <div class="p-4 text-gray-500">
+        No books found
+      </div>
+    `
+    mobileSearchDropdown.classList.remove('hidden')
+    return
+  }
+
+  mobileSearchResults.innerHTML = books.map(book => `
+    
+    <a href="book.html?id=${book.id}"
+      class="block p-3 border-b hover:bg-gray-100"
+    >
+      <div class="font-semibold">
+        ${book.title}
+      </div>
+      <div class="text-sm text-gray-500">
+        ${book.author}
+      </div>
+    </a>
+  `).join('')
+
+  mobileSearchDropdown.classList.remove('hidden')
+})
+
+
+
+async function loadNewReleaseBooks() {
+
+  const container =
+    document.getElementById(
+      'newReleaseBooksContainer'
+    )
+
+  if (!container) return
+
+  const { data, error } =
+    await supabase
+      .from('books')
+      .select('*')
+      .order(
+        'created_at',
+        { ascending: false }
+      )
+      .limit(18)
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  container.innerHTML =
+    data.map(renderCard).join('')
+}
+
+loadNewReleaseBooks()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// skelenton loading
+const container = document.getElementById('featuredBooksContainer');
+
+if (container) {
+  container.innerHTML = Array(6).fill(`
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden animate-pulse">
+      <div class="bg-gray-200 h-64 w-full"></div>
+      <div class="p-4 space-y-3">
+        <div class="bg-gray-200 h-4 rounded w-3/4"></div>
+        <div class="bg-gray-200 h-3 rounded w-1/2"></div>
+        <div class="bg-gray-200 h-9 rounded w-full mt-2"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+
+
+
+

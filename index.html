@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eduforge</title>
+  <title>Home Page</title>
   <link rel="icon" type="image/x-icon" href="assets/icon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/tailwind-output.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="css/eduforge.css" />
 </head>
-
 <body class="bg-gray-50">
 
 <!-- ============================================================
@@ -59,7 +58,10 @@
           <!-- Navigation links -->
           <a href="index.html"   class="block px-4 py-3 hover:bg-gray-100">Home</a>
           <a href="browse.html"  class="block px-4 py-3 hover:bg-gray-100">Browse</a>
+          <a href="publisher-dashboard.html" id="publisherDashboardLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+          <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
           <a href="cart.html"    class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+          <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
 
           <!-- Mobile logout button -->
           <button
@@ -90,12 +92,18 @@
     class="hidden md:hidden bg-white border-b px-4 py-3"
   >
     <input
-      type="text"
-      id="mobileSearchInput"
-      placeholder="Search books..."
-      class="w-full border rounded-lg px-4 py-1.5"
-    />
-  </div>
+          type="text"
+          id="mobileSearchInput"
+          placeholder="Search books, authors, publishers..."
+          class="w-full px-4 py-2 border rounded-full"
+        />
+        <div
+          id="mobileSearchDropdown"
+          class="hidden absolute top-full mt-2 bg-white shadow-lg rounded-lg w-full z-50"
+        >
+          <div id="mobileSearchResults"></div>
+        </div>
+      </div>
 
   <!-- Slide-out sidebar menu —-->
   <div id="mobileMenu" class="hidden fixed inset-0 z-50">
@@ -111,8 +119,10 @@
       <div class="py-2">
         <a href="index.html"  class="block px-4 py-3 hover:bg-gray-100">Home</a>
         <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100">Browse</a>
-        <a href="#"           class="block px-4 py-3 hover:bg-gray-100">Categories</a>
+        <a href="publisher-dashboard.html" id="sidebarPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+        <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
         <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+        <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
       </div>
     </div>
 
@@ -129,25 +139,7 @@
       <div class="flex items-center gap-8">
         <img src="assets/logo.jpeg" class="w-20 md:w-38 h-auto" alt="Eduforge logo" />
 
-        <!-- Categories dropdown -->
-        <div class="relative">
-          <button
-            id="categoriesBtn"
-            class="font-medium text-gray-700 hover:text-blue-600"
-          >
-            Categories
-          </button>
-
-          <div
-            id="categoriesDropdown"
-            class="hidden absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
-          >
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Computer Science</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Cybersecurity</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Mathematics</a>
-            <a href="#" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">Business</a>
-          </div>
-        </div>
+        
       </div>
 
       <!-- Center: Search input with dropdown -->
@@ -226,8 +218,17 @@
               <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
                 <img src="assets/browse.png" alt="" class="w-5 h-5 inline mr-2" /> Browse
               </a>
+              <a href="publisher-dashboard.html" id="desktopPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/publisher.png" alt="" class="w-5 h-5 inline mr-2" /> Publisher Dashboard
+              </a>
+              <a href="library.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/library.png" alt="" class="w-5 h-5 inline mr-2" /> My Library
+              </a>
               <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
                 <img src="assets/cart.png" alt="" class="w-5 h-5 inline mr-2" /> Cart
+              </a>
+              <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/purchase-history.png" alt="" class="w-5 h-5 inline mr-2" /> Purchase History
               </a>
             </div>
 
@@ -253,7 +254,7 @@
 
 
 <!-- HERO SECTION -->
-<section class="bg-gradient-to-r from-blue-600 to-yellow-700 text-white py-20">
+<section class="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
   <div class="max-w-7xl mx-auto px-4">
     <div class="max-w-3xl">
       <h1 class="text-4xl font-bold mb-6">Your Gateway to Unlimited Knowledge</h1>
@@ -266,19 +267,6 @@
 </section>
 
 
-<!-- FEATURED BOOKS -->
-<section class="py-16">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="flex justify-between items-center mb-8">
-      <div>
-        <h2 class="text-3xl font-bold">Featured Books</h2>
-        <p class="text-gray-600">Handpicked books for students</p>
-      </div>
-    </div>
-    <!-- Books injected here by books.js -->
-    <div id="featuredBooksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-  </div>
-</section>
 
 
 <!-- STATS SECTION -->
@@ -323,6 +311,83 @@
 </section>
 
 
+
+
+<!-- FEATURED BOOKS -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-3xl font-bold">Featured Books</h2>
+        <p class="text-gray-600">Handpicked books for students</p>
+      </div>
+    </div>
+    <!-- Books injected here by books.js -->
+    <div id="featuredBooksContainer" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-6"></div>
+  </div>
+</section>
+
+
+<!-- Newly Released Books -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+
+    <h2 class="text-3xl font-bold mb-2">
+      Newly Released Books
+    </h2>
+
+    <p class="text-gray-600 mb-8">
+      Latest books added to EduForge
+    </p>
+
+    <div
+      id="newReleaseBooksContainer"
+      class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-6"
+    ></div>
+
+  </div>
+</section>
+
+
+
+<!-- HOW IT WORKS -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-10">How It Works</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+
+      <div>
+        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-blue-600 font-bold text-xl">1</span>
+        </div>
+        <h3 class="font-semibold mb-2">Browse</h3>
+        <p class="text-gray-600 text-sm">Explore thousands of e-books across every subject and category.</p>
+      </div>
+
+      <div>
+        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-blue-600 font-bold text-xl">2</span>
+        </div>
+        <h3 class="font-semibold mb-2">Buy</h3>
+        <p class="text-gray-600 text-sm">Securely checkout in Naira using your card or bank transfer.</p>
+      </div>
+
+      <div>
+        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-blue-600 font-bold text-xl">3</span>
+        </div>
+        <h3 class="font-semibold mb-2">Read</h3>
+        <p class="text-gray-600 text-sm">Access your book instantly from your Library, anytime, anywhere.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
 <!-- WHY CHOOSE EDUFORGE SECTION -->
 <section>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -340,13 +405,26 @@
         <h3 class="text-xl font-semibold mb-3 text-blue-600">Trusted by Students</h3>
         <p class="text-gray-700">Join a community of learners who have benefited from our comprehensive e-book collection.</p>
       </div>
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">Affordable Prices</h3>
+        <p class="text-gray-700">Get access to high-quality educational content without breaking the bank.</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">Publish your Work</h3>
+        <p class="text-gray-700">Our platform allows you to share your knowledge and reach a wider audience.</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-xl font-semibold mb-3 text-blue-600">Start making Income</h3>
+        <p class="text-gray-700">Monetize your expertise by publishing your own e-books on our platform.</p>
     </div>
   </div>
 </section>
 
 
+
+
 <!-- CALL TO ACTION SECTION -->
-<section class="bg-gradient-to-r from-blue-600 to-yellow-800 text-white py-12 sm:py-16 lg:py-20">
+<section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 sm:py-16 lg:py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Start Learning Today</h2>
     <p class="text-base sm:text-lg lg:text-xl text-blue-100 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">

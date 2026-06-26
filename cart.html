@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart</title>
+  <link rel="icon" type="image/x-icon" href="assets/icon.png" />
+  <link rel="stylesheet" href="css/tailwind-output.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/eduforge.css" />
+</head>
+<body class="bg-gray-50">
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="bg-white border-b sticky top-0 z-50">
+
+
+  <!--MOBILE NAVBAR-->
+  <div class="md:hidden flex items-center justify-between px-4 h-16">
+
+    <!-- Hamburger button —-->
+    <button id="mobileMenuBtn">
+      <img src="assets/menu.png" class="w-6 h-6" alt="Menu" />
+    </button>
+
+    <!-- Logo (center) -->
+    <img src="assets/logo.jpeg" class="h-10" alt="Eduforge logo" />
+
+    <!-- Right side: search icon + avatar (when logged in) or nothing extra (when logged out) -->
+    <div class="flex items-center gap-4">
+
+      <!-- Search icon button — toggles the mobile search bar below the navbar -->
+      <button id="mobileSearchBtn">
+        <img src="assets/search.png" class="w-6 h-6" alt="Search" />
+      </button>
+
+      <!-- -MOBILE AVATAR --- -->
+      <div class="relative">
+        <button
+          id="mobileAvatarBtn"
+          class="hidden w-8 h-8 rounded-full bg-blue-600 text-white font-bold"
+        >
+        </button>
+
+        <!-- Mobile avatar dropdown menu -->
+        <div
+          id="mobileAvatarDropdown"
+          class="hidden absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
+        >
+          <!-- User info section -->
+          <div class="p-4 border-b">
+            <p id="mobileUserName" class="font-semibold">User</p>
+            <p id="mobileUserEmail" class="text-sm text-gray-500">email@example.com</p>
+          </div>
+
+          <!-- Navigation links -->
+          <a href="index.html"   class="block px-4 py-3 hover:bg-gray-100">Home</a>
+          <a href="browse.html"  class="block px-4 py-3 hover:bg-gray-100">Browse</a>
+          <a href="publisher-dashboard.html" id="publisherDashboardLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+          <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
+          <a href="cart.html"    class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+          <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
+
+          <!-- Mobile logout button -->
+          <button
+            id="mobileLogoutBtn"
+            class="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- -MOBILE AUTH BUTTONS -->
+      <div id="mobileAuthButtons" class="flex gap-2">
+        <button id="mobileOpenSignin" class="text-blue-600 text-sm font-medium">
+          Sign In
+        </button>
+        <button id="mobileOpenSignup" class="bg-blue-600 text-white text-sm px-3 py-1.5 rounded-lg">
+          Sign Up
+        </button>
+      </div>
+
+    </div>
+  </div><!-- end mobile top bar -->
+
+  <!-- Mobile search bar —-->
+  <div
+    id="mobileSearch"
+    class="hidden md:hidden bg-white border-b px-4 py-3"
+  >
+    <input
+          type="text"
+          id="mobileSearchInput"
+          placeholder="Search books, authors, publishers..."
+          class="w-full px-4 py-2 border rounded-full"
+        />
+        <div
+          id="mobileSearchDropdown"
+          class="hidden absolute top-full mt-2 bg-white shadow-lg rounded-lg w-full z-50"
+        >
+          <div id="mobileSearchResults"></div>
+        </div>
+      </div>
+
+  <!-- Slide-out sidebar menu —-->
+  <div id="mobileMenu" class="hidden fixed inset-0 z-50">
+
+    <!-- Dark overlay —-->
+    <div id="mobileMenuOverlay" class="absolute inset-0 bg-black/50"></div>
+
+    <!-- Sidebar panel -->
+    <div class="absolute left-0 top-0 h-full w-72 bg-white shadow-xl">
+      <div class="p-4 border-b">
+        <img src="assets/logo.jpeg" class="h-10" alt="Eduforge logo" />
+      </div>
+      <div class="py-2">
+        <a href="index.html"  class="block px-4 py-3 hover:bg-gray-100">Home</a>
+        <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100">Browse</a>
+        <a href="publisher-dashboard.html" id="sidebarPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100">Publisher Dashboard</a>
+        <a href="library.html" class="block px-4 py-3 hover:bg-gray-100">My Library</a>
+        <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100">Cart</a>
+        <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100">Purchase History</a>
+      </div>
+    </div>
+
+  </div><!-- end mobile menu -->
+
+
+  <!-- ===========================================================
+       DESKTOP NAVBAR  (hidden below md breakpoint)
+       =========================================================== -->
+  <div class="hidden md:block max-w-7xl mx-auto px-4">
+    <div class="flex justify-between h-16 items-center">
+
+      <!-- Left side: Logo-->
+      <div class="flex items-center gap-8">
+        <img src="assets/logo.jpeg" class="w-20 md:w-38 h-auto" alt="Eduforge logo" />
+
+        
+      </div>
+
+      <!-- Center: Search input with dropdown -->
+      <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search books, authors, publishers..."
+          class="w-full px-4 py-2 border rounded-full"
+        />
+        <div
+          id="searchDropdown"
+          class="hidden absolute top-full mt-2 bg-white shadow-lg rounded-lg w-full z-50"
+        >
+          <div id="searchResults"></div>
+        </div>
+      </div>
+
+      <!-- Right side: Cart -->
+      <div class="flex items-center gap-3">
+
+        <!-- Cart icon link -->
+        <a href="cart.html" class="flex items-center">
+          <img src="assets/cart.png" class="w-6 h-6" alt="Cart" />
+        </a>
+
+        <!-- DESKTOP AUTH BUTTONS- -->
+        <div id="authButtons" class="flex gap-3">
+          <button id="openSignin" class="text-blue-600">Sign In</button>
+          <button id="openSignup" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Sign Up</button>
+        </div>
+
+        <!-- DESKTOP USER MENU -->
+        <div id="userMenu" class="hidden relative flex items-center gap-3">
+
+          <!-- Welcome text -->
+          <div class="text-right">
+            <p class="text-xs text-gray-500">Hi,</p>
+            <p id="welcomeUserName" class="font-semibold text-gray-800">User</p>
+          </div>
+
+          <!-- Avatar circle button — toggles the dropdown below -->
+          <button
+            id="userMenuBtn"
+            class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center"
+          >
+            <!-- First letter set by main.js -->
+          </button>
+
+          <!-- Desktop user dropdown menu -->
+          <div
+            id="userDropdown"
+            class="hidden absolute top-full right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50"
+          >
+            <!-- User info header -->
+            <div class="p-4 bg-gray-50">
+              <div class="flex items-center gap-3">
+                <div
+                  id="dropdownAvatar"
+                  class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg"
+                >
+                  <!-- First letter set by main.js -->
+                </div>
+                <div class="min-w-0">
+                  <p id="dropdownFullName" class="font-semibold text-gray-900 truncate">User Name</p>
+                  <p id="dropdownEmail"    class="text-sm text-gray-500 truncate">email@example.com</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Navigation links -->
+            <div class="border-t">
+              <a href="index.html"  class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/homebutton.png" alt="" class="w-5 h-5 inline mr-2" /> Home
+              </a>
+              <a href="browse.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/browse.png" alt="" class="w-5 h-5 inline mr-2" /> Browse
+              </a>
+              <a href="publisher-dashboard.html" id="desktopPublisherLink" class="hidden block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/publisher.png" alt="" class="w-5 h-5 inline mr-2" /> Publisher Dashboard
+              </a>
+              <a href="library.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/library.png" alt="" class="w-5 h-5 inline mr-2" /> My Library
+              </a>
+              <a href="cart.html"   class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/cart.png" alt="" class="w-5 h-5 inline mr-2" /> Cart
+              </a>
+              <a href="purchase-history.html" class="block px-4 py-3 hover:bg-gray-100 hover:text-blue-600">
+                <img src="assets/purchase-history.png" alt="" class="w-5 h-5 inline mr-2" /> Purchase History
+              </a>
+            </div>
+
+            <!-- Logout button -->
+            <div class="border-t">
+              <button
+                id="logoutBtn"
+                class="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
+              >
+                <img src="assets/logout.png" alt="" class="w-5 h-5 inline mr-2" /> Logout
+              </button>
+            </div>
+          </div>
+
+        </div><!-- end userMenu -->
+
+      </div><!-- end right side -->
+
+    </div>
+  </div><!-- end desktop navbar -->
+
+</nav><!-- end navbar -->
+
+
+
+
+
+<div class="max-w-7xl mx-auto px-4 py-10">
+
+  <h1 class="text-3xl font-bold mb-8">
+    Shopping Cart
+  </h1>
+
+  <div
+    id="cartContainer"
+    class="space-y-4"
+  ></div>
+
+  <div
+    id="cartTotal"
+    class="mt-8 text-right text-2xl font-bold"
+  >
+    Total: ₦0
+  </div>
+<div class="mt-6 text-right">
+
+  
+
+</div>
+</div>
+
+
+
+
+
+<!-- CALL TO ACTION SECTION -->
+<section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 sm:py-16 lg:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Start Learning Today</h2>
+    <p class="text-base sm:text-lg lg:text-xl text-blue-100 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+      Join thousands of students who are already advancing their education with our comprehensive e-book library.
+    </p>
+    <a
+      href="browse.html"
+      class="inline-block bg-white text-blue-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+    >
+      Explore Now
+    </a>
+  </div>
+</section>
+
+
+
+<!-- FOOTER -->
+<footer class="bg-gray-800 text-gray-400 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-sm">&copy; 2026 Eduforge. All rights reserved.</p>
+    <div class="flex space-x-3">
+      <a href="#" class="hover:text-gray-200 text-sm">Privacy Policy</a>
+      <a href="#" class="hover:text-gray-200 text-sm">Terms of Service</a>
+      <a href="#" class="hover:text-gray-200 text-sm">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- AUTH MODAL -->
+<div
+  id="authModal"
+  class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-xl p-6 w-full max-w-md">
+
+    <div class="flex justify-between items-center mb-6">
+      <img src="assets/logo.jpeg" class="w-20 md:w-38 h-auto" alt="Eduforge logo" />
+      <h2 id="modalTitle" class="text-2xl font-bold">Sign In</h2>
+      <button id="closeModal">✕</button>
+    </div>
+
+    <form id="authForm" class="space-y-4">
+      <!-- Only shown during sign up -->
+      <input type="text"     id="nameInput"     placeholder="Full Name" class="hidden w-full border rounded-lg px-4 py-2" />
+      <input type="email"    id="emailInput"    placeholder="Email"     class="w-full border rounded-lg px-4 py-2" />
+      <input type="password" id="passwordInput" placeholder="Password"  class="w-full border rounded-lg px-4 py-2" />
+
+      <!-- Role selector — only shown during sign up -->
+      <select id="roleInput" class="hidden w-full border rounded-lg px-4 py-2">
+        <option value="student">Student</option>
+        <option value="publisher">Publisher</option>
+      </select>
+
+      <button type="submit" id="submitAuth" class="w-full bg-blue-600 text-white py-2 rounded-lg">
+        Continue
+      </button>
+    </form>
+
+  </div>
+</div>
+
+
+<script type="module" src="js/main.js"></script>
+<script
+    type="module"
+    src="js/cart.js"
+  ></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+</body>
+</html>
