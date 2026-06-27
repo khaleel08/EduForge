@@ -5,7 +5,8 @@ const PORT = process.env.PORT || 8888;
 
 app.use(express.static(path.join(__dirname)));
 
-app.get('*', (req, res) => {
+// Express v5 compatible wildcard
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
