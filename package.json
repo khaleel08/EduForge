@@ -4,6 +4,8 @@
   "description": "\"# EduForge\"",
   "main": "index.js",
   "scripts": {
+    "build": "npx tailwindcss -i ./css/input.css -o ./css/tailwind-output.css --minify",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +22,8 @@
   "homepage": "https://github.com/khaleel08/EduForge#readme",
   "devDependencies": {
     "tailwindcss": "^3.4.19"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
