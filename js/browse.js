@@ -178,7 +178,7 @@ document.querySelectorAll('.category-btn').forEach(btn => {
   btn.addEventListener('mouseout', () => {
     if (btn.dataset.category !== btn.closest('[data-active]')?.dataset.active) {
       const active = document.querySelector('.category-btn[data-active]')
-      if (btn.style.background !== '#1900ff') {
+      if (btn.style.background !== '#0000FF') {
         btn.style.borderColor = '#e5e7eb'
         btn.style.color = '#6b7280'
       }
