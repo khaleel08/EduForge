@@ -8,9 +8,7 @@ if (!user) {
   window.location.href = 'index.html'
 }
 
-const {
-  data: profile
-} = await supabase
+const { data: profile } = await supabase
   .from('profiles')
   .select('role')
   .eq('id', user.id)
@@ -136,6 +134,11 @@ async function loadPublisherBooks() {
 
   const container = document.getElementById('publisherBooks')
 
+  if (!books || books.length === 0) {
+    container.innerHTML = '<p class="text-gray-500 col-span-full">No books uploaded yet.</p>'
+    return
+  }
+
   container.innerHTML = books.map(book => `
     <div class="bg-white rounded-lg shadow p-4">
       <img
@@ -163,10 +166,6 @@ async function loadPublisherBooks() {
 
 
 // ─── DELETE BOOK + STORAGE FILES ─────────────────────────────────────────────
-// FIX: decodeURIComponent() is required because URLs in the DB have encoded
-// spaces as %20 (e.g. "my%20book.pdf"). Supabase Storage stores the file
-// with a real space, so passing "%20" to .remove() matches nothing — the
-// delete "succeeds" with 200 but removes no file. Decoding fixes the mismatch.
 
 window.deleteBook = async function(id) {
   const confirmed = confirm('Delete this book? This cannot be undone.')
@@ -238,13 +237,14 @@ window.deleteBook = async function(id) {
 // ─── EDIT BOOK ────────────────────────────────────────────────────────────────
 
 window.editBook = async function(id) {
-  editingBookId = id
-
   const { data: book } = await supabase
     .from('books')
     .select('*')
     .eq('id', id)
     .single()
+
+  // Set editingBookId AFTER the fetch to avoid a race condition
+  editingBookId = id
 
   document.getElementById('editTitle').value       = book.title
   document.getElementById('editDescription').value = book.description
@@ -270,6 +270,7 @@ document.getElementById('saveEditBtn').addEventListener('click', async () => {
   }
 
   document.getElementById('editModal').classList.add('hidden')
+  editingBookId = null
 
   loadPublisherBooks()
   loadSalesStats()
@@ -286,9 +287,10 @@ document.getElementById('saveEditBtn').addEventListener('click', async () => {
 async function loadSalesStats() {
   const { data: { user } } = await supabase.auth.getUser()
 
+  // FIX: Fetch all books + all their purchases in two queries instead of N+1
   const { data: books, error: booksError } = await supabase
     .from('books')
-    .select('*')
+    .select('id, price')
     .eq('publisher_id', user.id)
 
   if (booksError) {
@@ -296,20 +298,38 @@ async function loadSalesStats() {
     return
   }
 
-  const totalBooks = books.length
-  let totalSales   = 0
-  let totalRevenue = 0
-
-  for (const book of books) {
-    const { data: purchases } = await supabase
-      .from('purchases')
-      .select('*')
-      .eq('book_id', book.id)
-
-    const sales  = purchases?.length || 0
-    totalSales  += sales
-    totalRevenue += sales * book.price
+  if (!books || books.length === 0) {
+    document.getElementById('totalBooks').textContent   = 0
+    document.getElementById('totalSales').textContent   = 0
+    document.getElementById('totalRevenue').textContent = '₦0'
+    return
   }
+
+  const bookIds = books.map(b => b.id)
+
+  const { data: purchases, error: purchasesError } = await supabase
+    .from('purchases')
+    .select('book_id')
+    .in('book_id', bookIds)
+
+  if (purchasesError) {
+    console.error(purchasesError)
+    return
+  }
+
+  // Build a sales count map by book_id
+  const salesMap = {}
+  for (const p of (purchases || [])) {
+    salesMap[p.book_id] = (salesMap[p.book_id] || 0) + 1
+  }
+
+  const totalBooks   = books.length
+  const totalSales   = purchases?.length || 0
+  // FIX: parse price as a number before multiplying
+  const totalRevenue = books.reduce((sum, book) => {
+    const sales = salesMap[book.id] || 0
+    return sum + sales * Number(book.price)
+  }, 0)
 
   document.getElementById('totalBooks').textContent   = totalBooks
   document.getElementById('totalSales').textContent   = totalSales
@@ -324,9 +344,10 @@ async function loadSalesStats() {
 async function loadSalesTable() {
   const { data: { user } } = await supabase.auth.getUser()
 
+  // FIX: Fetch all books + all purchases in two queries instead of N+1
   const { data: books, error } = await supabase
     .from('books')
-    .select('*')
+    .select('id, title, price')
     .eq('publisher_id', user.id)
 
   if (error) {
@@ -335,29 +356,46 @@ async function loadSalesTable() {
   }
 
   const tableBody = document.getElementById('salesTableBody')
-  let html = ''
 
-  for (const book of books) {
-    const { data: purchases } = await supabase
-      .from('purchases')
-      .select('*')
-      .eq('book_id', book.id)
+  if (!books || books.length === 0) {
+    tableBody.innerHTML = '<tr><td class="p-4 text-gray-500" colspan="3">No books yet.</td></tr>'
+    return
+  }
 
-    const sales   = purchases?.length || 0
-    const revenue = sales * book.price
+  const bookIds = books.map(b => b.id)
 
-    html += `
+  const { data: purchases, error: purchasesError } = await supabase
+    .from('purchases')
+    .select('book_id')
+    .in('book_id', bookIds)
+
+  if (purchasesError) {
+    console.error(purchasesError)
+    return
+  }
+
+  // Build a sales count map by book_id
+  const salesMap = {}
+  for (const p of (purchases || [])) {
+    salesMap[p.book_id] = (salesMap[p.book_id] || 0) + 1
+  }
+
+  tableBody.innerHTML = books.map(book => {
+    const sales   = salesMap[book.id] || 0
+    // FIX: parse price as a number before multiplying
+    const revenue = sales * Number(book.price)
+    return `
       <tr class="border-t">
         <td class="p-4">${book.title}</td>
         <td class="p-4">${sales}</td>
         <td class="p-4">₦${revenue.toLocaleString()}</td>
       </tr>
     `
-  }
-
-  tableBody.innerHTML = html
+  }).join('')
 }
 
 
 
-
+loadPublisherBooks()
+loadSalesStats()
+loadSalesTable()
