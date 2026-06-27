@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js'
 
-const ACCENT = '#1900ff'
+const ACCENT = '#0000FF'
 const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 
 const booksContainer = document.getElementById('booksContainer')
@@ -23,7 +23,7 @@ function renderCard(book) {
         <span style="
           font-family: ${FONT};
           font-size: 13px; font-weight: 600;
-          color: #1900ff; text-align: center; line-height: 1.4;
+          color: #0000FF; text-align: center; line-height: 1.4;
         ">${book.title}</span>
       </div>`
 
@@ -94,10 +94,10 @@ function renderCard(book) {
 
 function displayBooks(books) {
   booksContainer.style.cssText = `
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-  `
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(160px, 45%), 1fr));
+  gap: 12px;
+`
 
   if (!books.length) {
     booksContainer.innerHTML = `
@@ -246,11 +246,10 @@ export async function loadNewReleaseBooks() {
   }
 
   container.style.cssText = `
-    display:grid;
-    grid-template-columns:
-      repeat(auto-fill,minmax(180px,1fr));
-    gap:20px;
-  `
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(160px, 45%), 1fr));
+  gap: 12px;
+`
 
   container.innerHTML =
     data.map(renderCard).join('')

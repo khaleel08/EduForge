@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js'
 
-const ACCENT = '#1900ff'
+const ACCENT = '#0000FF'
 
 function renderCard(item) {
   const book = item.books

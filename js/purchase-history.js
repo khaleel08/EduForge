@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js'
 
-const ACCENT = '#1900ff'
+const ACCENT = '#0000FF'
 const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 
 const container = document.getElementById('historyContainer')

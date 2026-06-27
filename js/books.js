@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js'
 
-const ACCENT = '#1900ff'
+const ACCENT = '#0000FF'
 
 
 // ─── RENDER CARD ─────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ export function renderCard(book) {
       ">
         <span style="
           font-size: 13px; font-weight: 600;
-          color: #1900ff; text-align: center; line-height: 1.4;
+          color: #0000FF; text-align: center; line-height: 1.4;
           font-family: Georgia, serif;
         ">${book.title}</span>
       </div>`
@@ -162,10 +162,10 @@ export async function loadFeaturedBooks() {
   }
 
   container.style.cssText = `
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-  `
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(160px, 45%), 1fr));
+  gap: 12px;
+`
 
   container.innerHTML = data.map(renderCard).join('')
 }

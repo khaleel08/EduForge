@@ -1,7 +1,7 @@
 import { supabase } from './supabase.js'
 
 const PAYSTACK_PUBLIC_KEY = 'pk_test_e104afae8ddc9f3a5ce994a09f14c2164c8b3d99'
-const ACCENT = '#1900ff'
+const ACCENT = '#0000FF'
 const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
 
 const checkoutSummary = document.getElementById('checkoutSummary')
