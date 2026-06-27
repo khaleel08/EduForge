@@ -64,3 +64,6 @@ export async function signIn(
 export async function logout() {
   await supabase.auth.signOut()
 }
+
+
+

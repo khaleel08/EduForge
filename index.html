@@ -18,21 +18,21 @@
 
 
   <!--MOBILE NAVBAR-->
-  <div class="md:hidden flex items-center justify-between px-4 h-16">
+  <div class="md:hidden flex items-center justify-between px-4 h-10">
 
     <!-- Hamburger button —-->
-    <button id="mobileMenuBtn">
+    <button id="mobileMenuBtn" class="hidden">
       <img src="assets/menu.png" class="w-6 h-6" alt="Menu" />
     </button>
 
     <!-- Logo (center) -->
-    <img src="assets/logo.jpeg" class="h-10" alt="Eduforge logo" />
+    <img src="assets/logo.jpeg" class="h-6" alt="Eduforge logo" />
 
     <!-- Right side: search icon + avatar (when logged in) or nothing extra (when logged out) -->
     <div class="flex items-center gap-4">
 
       <!-- Search icon button — toggles the mobile search bar below the navbar -->
-      <button id="mobileSearchBtn">
+      <button id="mobileSearchBtn" class="hidden">
         <img src="assets/search.png" class="w-6 h-6" alt="Search" />
       </button>
 
@@ -114,7 +114,7 @@
     <!-- Sidebar panel -->
     <div class="absolute left-0 top-0 h-full w-72 bg-white shadow-xl">
       <div class="p-4 border-b">
-        <img src="assets/logo.jpeg" class="h-10" alt="Eduforge logo" />
+        <img src="assets/logo.jpeg" class="h-6" alt="Eduforge logo" />
       </div>
       <div class="py-2">
         <a href="index.html"  class="block px-4 py-3 hover:bg-gray-100">Home</a>
@@ -323,7 +323,7 @@
       </div>
     </div>
     <!-- Books injected here by books.js -->
-    <div id="featuredBooksContainer" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-6"></div>
+    <div id="featuredBooksContainer" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-3 md:gap-6"></div>
   </div>
 </section>
 

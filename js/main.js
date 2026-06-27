@@ -506,3 +506,29 @@ if (container) {
 
 
 
+
+
+function updateMobileMenuVisibility(user) {
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+  
+  if (user) {
+    // User is signed in — show both
+    mobileMenuBtn.classList.remove('hidden');
+    mobileSearchBtn.classList.remove('hidden');
+  } else {
+    // User is not signed in — hide both
+    mobileMenuBtn.classList.add('hidden');
+    mobileSearchBtn.classList.add('hidden');
+  }
+}
+
+
+// On page load session check
+const { data: { session } } = await supabase.auth.getSession();
+updateMobileMenuVisibility(session?.user ?? null);
+
+// On auth state change
+supabase.auth.onAuthStateChange((event, session) => {
+  updateMobileMenuVisibility(session?.user ?? null);
+});
